@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-[#0A0A0A] selection:bg-white selection:text-black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAX RUMEAU | Visual Storyteller</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; color: #E5E5E5; overflow-x: hidden; }
+        h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; color: #FFFFFF; }
+        
+        .char { opacity: 0; transform: translateY(20px); }
+        
+        .glass-nav {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(to bottom, transparent 0%, #0A0A0A 100%);
+        }
+
+        .btn-premium {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .btn-premium:hover {
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        #cursor {
+            width: 10px; height: 10px; background: white; border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .hero-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+        }
+
+        .service-card {
+            height: 600px;
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            filter: grayscale(100%) brightness(0.5);
+        }
+        .service-card:hover {
+            filter: grayscale(0%) brightness(1);
+            flex: 2;
+        }
+
+        .text-outline {
+            -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+            color: transparent;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+        .social-link:hover { color: white; transform: translateX(5px); }
+        .social-link i { width: 18px; height: 18px; opacity: 0.6; }
+        .social-link:hover i { opacity: 1; }
+
+        /* Review Marquee Styles */
+        .marquee {
+            display: flex;
+            overflow: hidden;
+            user-select: none;
+            gap: 2rem;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .marquee__group {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 2rem;
+            min-width: 100%;
+            animation: scroll 60s linear infinite;
+        }
+
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(-100% - 2rem)); }
+        }
+
+        .review-card {
+            width: 350px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 4px;
+        }
+
+        .tripadvisor-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #00af87;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 2px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+
+    <header class="fixed top-0 w-full z-50 glass-nav px-10 py-5 flex justify-between items-center">
+        <div class="logo text-2xl font-bold tracking-tighter uppercase text-white">MAX RUMEAU</div>
+        <nav class="hidden lg:flex gap-10 items-center">
+            <a href="#truth" class="text-[10px] tracking-[0.2em] uppercase hover:text-white transition-opacity">01. The Truth</a>
+            <a href="#expertise" class="text-[10px] tracking-[0.2em] uppercase hover:text-white transition-opacity">02. Expertise</a>
+            <a href="#reviews" class="text-[10px] tracking-[0.2em] uppercase hover:text-white transition-opacity">03. Legacy</a>
+            <a href="#contact" class="text-[10px] tracking-[0.2em] uppercase hover:text-white transition-opacity">04. Contact</a>
+            <a href="#" class="hover:text-white transition-opacity"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+        </nav>
+        <div class="flex items-center gap-6">
+            <span class="hidden sm:block text-[10px] text-[#555] tracking-widest uppercase text-right">Available / Paris 2026</span>
+            <button class="btn-premium bg-white text-black px-8 py-3 text-[11px] font-bold tracking-widest uppercase rounded-[2px]">
+                Inquire
+            </button>
+        </div>
+    </header>
+
+    <section class="relative h-[120vh] w-full flex flex-col justify-end pb-20 px-10 overflow-hidden">
+        <div class="absolute inset-0 z-0" id="hero-container">
+            <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=2020&auto=format&fit=crop" 
+                 id="hero-bg"
+                 class="w-full h-full object-cover grayscale brightness-[0.4] scale-125" 
+                 alt="Paris Landscape">
+            <div class="absolute inset-0 hero-gradient"></div>
+        </div>
+        
+        <div class="relative z-10 w-full max-w-[1800px] mx-auto">
+            <div class="mb-12">
+                <p class="text-[10px] tracking-[0.3em] uppercase text-white mb-4 overflow-hidden">
+                    <span class="inline-block translate-y-full" id="hero-mini-tag">Independent Photographer based in France</span>
+                </p>
+                <h1 class="text-[10vw] md:text-[8vw] font-bold leading-[0.85] tracking-tighter text-white" data-splitting id="main-title">
+                    CAPTURING THE<br>ESSENCE.
+                </h1>
+            </div>
+
+            <div class="hero-info-grid opacity-0" id="hero-stats">
+                <div class="pr-10 border-r border-white/10">
+                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-4 text-white">Philosophy</span>
+                    <p class="text-sm text-[#888] leading-relaxed max-w-[300px]">
+                        We believe that photography is not about seeing, but about feeling. We document the silent dialogues between architecture and soul.
+                    </p>
+                </div>
+                <div class="px-10 border-r border-white/10">
+                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-4 text-white">Focus</span>
+                    <p class="text-sm text-[#888] leading-relaxed">
+                        High-End Editorial<br>Architectural Mastery<br>Private Commissions
+                    </p>
+                </div>
+                <div class="pl-10 flex flex-col justify-between italic text-white/40">
+                    <p class="text-xs">"Paris is a museum, and every street corner is a frame waiting to be lived."</p>
+                    <div class="flex gap-4">
+                        <span class="text-[10px] border border-white/20 px-2 py-1 uppercase text-white/60">Leica Q3</span>
+                        <span class="text-[10px] border border-white/20 px-2 py-1 uppercase text-white/60">35mm Fixed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="truth" class="py-24 bg-white">
+        <div class="px-10 max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+                <span class="text-[10px] tracking-[0.3em] uppercase block font-bold text-gray-400">01 — The Brutal Truth</span>
+                <div class="tripadvisor-badge">
+                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-white" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm0 18.5a6.5 6.5 0 110-13 6.5 6.5 0 010 13zm-2.5-6a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm5 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>
+                    Recommended on TripAdvisor
+                </div>
+            </div>
+            <h2 class="text-5xl md:text-7xl font-bold tracking-tighter leading-none mb-12 reveal text-black">
+                YOU ARE NOT <br> "UNPHOTOGENIC".
+            </h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="reveal">
+                    <p class="text-xl leading-tight font-medium mb-6 text-gray-900">
+                        Most people think they look "bad" on camera. In reality, they've just been victims of mediocre photographers.
+                    </p>
+                    <p class="text-base text-gray-500 leading-relaxed">
+                        Cheap lenses, wrong angles, and "amateur hands" destroy your confidence. They miss the micro-expressions, the lighting that shapes your face, and the soul of the moment.
+                    </p>
+                </div>
+                <div class="reveal space-y-6">
+                    <div class="p-6 border-l-2 border-black">
+                        <h4 class="font-bold text-xs uppercase tracking-widest mb-2 text-black">The Difference</h4>
+                        <p class="text-sm text-gray-500">Max doesn't "take" photos. He crafts them using premium optics and a deep understanding of human anatomy and light geometry. You don't need to "pose" — you just need a professional.</p>
+                    </div>
+                    <div class="p-6 bg-black text-white">
+                        <p class="italic text-base">"I've shot over 500+ clients who 'hated' being photographed. Every single one left with the best portrait of their life."</p>
+                        <span class="block mt-3 text-[9px] tracking-widest">— MAX RUMEAU</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="py-40 bg-[#0A0A0A] border-t border-white/5">
+        <div class="px-10 mb-20 text-center">
+            <span class="text-[10px] tracking-[0.5em] uppercase text-white/30 block mb-6">Testimonials</span>
+            <h2 class="text-5xl md:text-7xl font-bold tracking-tighter uppercase">The Legacy of <span class="text-outline">Light</span></h2>
+        </div>
+
+        <div class="marquee">
+            <div class="marquee__group">
+                <div class="review-card">
+                    <div class="flex gap-1 mb-4 text-yellow-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div>
+                    <p class="text-sm text-[#888] italic mb-6">"We were nervous about our elopement photos, but Max made us feel like movie stars. The results are pure art."</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest">Elena & Marc</span>
+                        <span class="text-[9px] text-white/20 uppercase">Couple</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="flex gap-1 mb-4 text-yellow-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div>
+                    <p class="text-sm text-[#888] italic mb-6">"I needed branding photos for my firm. Max captured a level of authority I didn't know I could project."</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest">Julian Thorne</span>
+                        <span class="text-[9px] text-white/20 uppercase">Solo Icon</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="flex gap-1 mb-4 text-yellow-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div>
+                    <p class="text-sm text-[#888] italic mb-6">"Three kids in Paris is chaos. Somehow, Max turned that chaos into the most beautiful family portraits we've ever owned."</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest">The Millers</span>
+                        <span class="text-[9px] text-white/20 uppercase">Family</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="flex gap-1 mb-4 text-yellow-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div>
+                    <p class="text-sm text-[#888] italic mb-6">"If you are in Paris and don't book Max, you are making a mistake. He knows every secret corner of the city."</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest">Sarah J.</span>
+                        <span class="text-[9px] text-white/20 uppercase">Traveler</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="flex gap-1 mb-4 text-yellow-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div>
+                    <p class="text-sm text-[#888] italic mb-6">"Architectural shots that look like they belong in AD. Precision, lighting, and soul. Highly recommended."</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest">Luxury Rentals Ltd.</span>
+                        <span class="text-[9px] text-white/20 uppercase">Real Estate</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="flex gap-1 mb-4 text-yellow-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div>
+                    <p class="text-sm text-[#888] italic mb-6">"Elegant. Timeless. Sophisticated. Exactly what we wanted for our wedding anniversary."</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest">Chloe & Jean</span>
+                        <span class="text-[9px] text-white/20 uppercase">Couple</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="marquee__group" aria-hidden="true">
+                <div class="review-card">
+                    <div class="flex gap-1 mb-4 text-yellow-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div>
+                    <p class="text-sm text-[#888] italic mb-6">"The editing is where the magic happens. Every frame was polished to perfection. Truly premium service."</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest">M. Romanov</span>
+                        <span class="text-[9px] text-white/20 uppercase">Creative Director</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="flex gap-1 mb-4 text-yellow-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div>
+                    <p class="text-sm text-[#888] italic mb-6">"Best photoshoot experience of my life. Max is more than a photographer, he is an artist of life."</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest">Sofia B.</span>
+                        <span class="text-[9px] text-white/20 uppercase">Solo Traveler</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="flex gap-1 mb-4 text-yellow-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div>
+                    <p class="text-sm text-[#888] italic mb-6">"Professionalism at its peak. Max arrives early, knows the light, and delivers ahead of schedule."</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest">David & Lara</span>
+                        <span class="text-[9px] text-white/20 uppercase">Luxury Wedding</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="flex gap-1 mb-4 text-yellow-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div>
+                    <p class="text-sm text-[#888] italic mb-6">"Capturing my real estate portfolio was effortless with Max. His eye for detail is unmatched."</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest">Estates Paris</span>
+                        <span class="text-[9px] text-white/20 uppercase">Partner</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="flex gap-1 mb-4 text-yellow-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div>
+                    <p class="text-sm text-[#888] italic mb-6">"The Leica lens really makes a difference. Crisp, beautiful, soulful images. Thank you, Max!"</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest">A. Peterson</span>
+                        <span class="text-[9px] text-white/20 uppercase">Solo Icon</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="flex gap-1 mb-4 text-yellow-500"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div>
+                    <p class="text-sm text-[#888] italic mb-6">"Perfect for surprise proposals. He stayed hidden and caught the exact moment she said yes."</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest">Tom & Sarah</span>
+                        <span class="text-[9px] text-white/20 uppercase">Couple</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-40 bg-[#0A0A0A] overflow-hidden">
+        <div class="max-w-[1800px] mx-auto px-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+                <div class="relative aspect-[3/4] overflow-hidden reveal">
+                    <img src="https://static.wixstatic.com/media/84c826_fe67480c6cbb4bdba175f85468cf52d8~mv2.jpg/v1/crop/x_0,y_478,w_3775,h_3763/fill/w_624,h_728,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Paris%20Photoshoot%20-%20Max%20Rumeau%20Photography%20-%20WEB-83.jpg" 
+                         alt="Max Rumeau" 
+                         id="max-portrait"
+                         class="w-full h-full object-cover scale-110 grayscale hover:grayscale-0 transition-all duration-1000">
+                    <div class="absolute bottom-10 left-10">
+                        <span class="text-white text-8xl font-bold opacity-10 uppercase tracking-tighter">HUMAN</span>
+                    </div>
+                </div>
+
+                <div class="reveal">
+                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-10 text-white/30 font-bold">02 — The Creator</span>
+                    <h2 class="text-5xl md:text-7xl font-bold tracking-tighter leading-none mb-10 uppercase">
+                        HI, I'M MAX. <br>YOUR EYES IN PARIS.
+                    </h2>
+                    <p class="text-xl text-[#888] leading-relaxed mb-10 font-medium">
+                        Born and raised in Paris, I’m not just the guy with a Leica. I’m your holiday planner, your city guide, and your friend in the city of light. 🗼
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div class="space-y-4">
+                            <h4 class="text-white font-bold tracking-widest uppercase text-xs">Friendly Approach</h4>
+                            <p class="text-sm text-[#666]">My relaxed demeanor ensures genuine, heartfelt photographs. Forget "stiff posing" — we just walk and talk.</p>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="text-white font-bold tracking-widest uppercase text-xs">Local Expertise</h4>
+                            <p class="text-sm text-[#666]">I know the hidden corners where the light hits just right, far from the tourist crowds.</p>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="text-white font-bold tracking-widest uppercase text-xs">Trilingual</h4>
+                            <p class="text-sm text-[#666]">Fluent in English and French, and I can communicate in Spanish too. No barriers, just memories.</p>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="text-white font-bold tracking-widest uppercase text-xs">Quality Obsessed</h4>
+                            <p class="text-sm text-[#666]">I personally handle every single edit. No presets, no outsourcing. Just pure craft.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-16 flex gap-4">
+                        <div class="px-6 py-4 border border-white/10 rounded-full flex items-center gap-3">
+                            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <span class="text-[10px] uppercase tracking-widest font-bold">Always Open to Your Ideas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="expertise" class="py-20 bg-[#0A0A0A]">
+        <div class="px-10 mb-10">
+            <h2 class="text-4xl font-bold tracking-tighter uppercase text-white">The Disciplines</h2>
+        </div>
+        
+        <div class="flex flex-col md:flex-row h-auto md:h-[700px] w-full gap-2 px-2">
+            <div class="service-card group relative flex flex-col justify-end p-10 flex-1 overflow-hidden bg-[url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069')] bg-cover bg-center">
+                <div class="relative z-10">
+                    <span class="text-[10px] tracking-widest text-white/50 uppercase">01</span>
+                    <h3 class="text-3xl font-bold uppercase text-white">Weddings</h3>
+                    <p class="text-sm text-white/0 group-hover:text-white/70 transition-all duration-500 mt-2">Cinematic storytelling for high-end celebrations.</p>
+                </div>
+            </div>
+            <div class="service-card group relative flex flex-col justify-end p-10 flex-1 overflow-hidden bg-[url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974')] bg-cover bg-center">
+                <div class="relative z-10">
+                    <span class="text-[10px] tracking-widest text-white/50 uppercase">02</span>
+                    <h3 class="text-3xl font-bold uppercase text-white">Solo / Icons</h3>
+                    <p class="text-sm text-white/0 group-hover:text-white/70 transition-all duration-500 mt-2">Personal branding for leaders and visionaries.</p>
+                </div>
+            </div>
+            <div class="service-card group relative flex flex-col justify-end p-10 flex-1 overflow-hidden bg-[url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070')] bg-cover bg-center">
+                <div class="relative z-10">
+                    <span class="text-[10px] tracking-widest text-white/50 uppercase">03</span>
+                    <h3 class="text-3xl font-bold uppercase text-white">Real Estate</h3>
+                    <p class="text-sm text-white/0 group-hover:text-white/70 transition-all duration-500 mt-2">Architectural precision for premium properties.</p>
+                </div>
+            </div>
+            <div class="service-card group relative flex flex-col justify-end p-10 flex-1 overflow-hidden bg-[url('https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=2020')] bg-cover bg-center">
+                <div class="relative z-10">
+                    <span class="text-[10px] tracking-widest text-white/50 uppercase">04</span>
+                    <h3 class="text-3xl font-bold uppercase text-white">Photo Tours</h3>
+                    <p class="text-sm text-white/0 group-hover:text-white/70 transition-all duration-500 mt-2">Discovering hidden Paris through a professional lens.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="pt-32 pb-10 px-10 border-t border-white/5 bg-[#0A0A0A]">
+        <div class="max-w-[1800px] mx-auto">
+            <div class="mb-24">
+                <h2 class="text-[8vw] font-bold text-outline uppercase leading-none mb-10 opacity-50">Reserve Your Legacy</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
+                <div>
+                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-8 text-gray-500 font-bold">Bookings & Info</span>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="mailto:contact@maxrumeauphotography.com" class="social-link text-lg">
+                                <i data-lucide="mail"></i> 
+                                <span class="text-sm">contact@maxrumeau...</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://maxrumeau.photography" target="_blank" class="social-link text-lg">
+                                <i data-lucide="globe"></i>
+                                <span class="text-sm">Official Portfolio</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="tel:+33610813834" class="social-link text-lg">
+                                <i data-lucide="phone"></i>
+                                <span class="text-sm">+33 6 10 81 38 34</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-8 text-gray-500 font-bold">Services</span>
+                    <ul class="space-y-3 text-sm text-[#888]">
+                        <li><a href="#" class="hover:text-white transition-all">Couple Photoshoots</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">Family Photoshoot</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">Eiffel Tower Photoshoot</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">France Photographer</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-8 text-gray-500 font-bold">Connect</span>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="#" class="social-link">
+                                <i data-lucide="instagram"></i>
+                                <span class="text-xs tracking-widest uppercase font-bold">Instagram</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="social-link">
+                                <i data-lucide="message-circle"></i>
+                                <span class="text-xs tracking-widest uppercase font-bold">WhatsApp</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="social-link">
+                                <i data-lucide="linkedin"></i>
+                                <span class="text-xs tracking-widest uppercase font-bold">LinkedIn</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] tracking-[0.3em] uppercase block mb-8 text-gray-500 font-bold">Location</span>
+                        <p class="text-sm text-[#888] flex gap-2 items-start">
+                            <i data-lucide="map-pin" class="w-4 h-4 mt-1"></i>
+                            Based in Paris, France.<br>Available for worldwide commissions.
+                        </p>
+                    </div>
+                    <div class="mt-10">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                            <span class="text-[10px] uppercase tracking-widest text-white">Accepting 2026 Bookings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-white/5 gap-6">
+                <div class="text-[9px] tracking-[0.5em] text-[#444] uppercase text-center md:text-left">
+                    © 2026 MAX RUMEAU — HAND-CODED PREMIUM EXPERIENCE
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        Splitting();
+        gsap.registerPlugin(ScrollTrigger);
+
+        const cursor = document.querySelector('#cursor');
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
+        });
+
+        const tl = gsap.timeline();
+        tl.to('#hero-mini-tag', { y: 0, duration: 1, ease: "power4.out", delay: 0.5 })
+          .to('.char', { y: 0, opacity: 1, stagger: 0.03, duration: 1, ease: "expo.out" }, "-=0.5")
+          .to('#hero-stats', { opacity: 1, y: -20, duration: 1.5 }, "-=0.7");
+
+        gsap.to('#hero-bg', {
+            scrollTrigger: { trigger: 'section', start: 'top top', end: 'bottom top', scrub: true },
+            y: 200, scale: 1
+        });
+
+        gsap.to('#max-portrait', {
+            scrollTrigger: { trigger: '#max-portrait', start: 'top bottom', end: 'bottom top', scrub: true },
+            y: -100
+        });
+
+        gsap.utils.toArray('.reveal').forEach(el => {
+            gsap.from(el, {
+                scrollTrigger: { trigger: el, start: "top 85%" },
+                y: 60, opacity: 0, duration: 1.5, ease: "power4.out"
+            });
+        });
+    </script>
+</body>
+</html>
