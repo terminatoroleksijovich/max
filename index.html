@@ -33,94 +33,151 @@
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        
         .btn-premium:hover {
             box-shadow: 0 0 20px rgba(255,255,255,0.1);
             transform: translateY(-2px);
         }
+        .btn-premium:active {
+            transform: translateY(0);
+        }
 
+        /* Desktop cursor — hidden on touch devices */
         #cursor {
             width: 10px; height: 10px; background: white; border-radius: 50%;
             position: fixed; pointer-events: none; z-index: 9999;
             display: flex; align-items: center; justify-content: center;
         }
+        @media (hover: none) and (pointer: coarse) {
+            #cursor { display: none !important; }
+        }
 
+        /* ─── Hero info grid ─────────────────────────────── */
         .hero-info-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 2rem;
+            gap: 0;
+        }
+        @media (max-width: 767px) {
+            .hero-info-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .hero-info-grid > div {
+                border-right: none !important;
+                border-left: none !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                padding-bottom: 1.5rem;
+                border-bottom: 1px solid rgba(255,255,255,0.07);
+            }
+            .hero-info-grid > div:last-child { border-bottom: none; }
         }
 
+        /* ─── Service cards ──────────────────────────────── */
         .service-card {
-            height: 600px;
             transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
             filter: grayscale(100%) brightness(0.5);
         }
-        .service-card:hover {
-            filter: grayscale(0%) brightness(1);
-            flex: 2;
+        /* Desktop accordion */
+        @media (min-width: 768px) {
+            .service-card { height: 600px; flex: 1; }
+            .service-card:hover {
+                filter: grayscale(0%) brightness(1);
+                flex: 2;
+            }
+        }
+        /* Mobile: full-width cards stacked */
+        @media (max-width: 767px) {
+            .service-card {
+                height: 260px;
+                width: 100%;
+                filter: grayscale(0%) brightness(0.75);
+            }
         }
 
+        /* ─── Outline text ───────────────────────────────── */
         .text-outline {
             -webkit-text-stroke: 1px rgba(255,255,255,0.2);
             color: transparent;
         }
 
+        /* ─── Social links ───────────────────────────────── */
         .social-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display: flex; align-items: center; gap: 12px;
             transition: all 0.3s ease;
         }
         .social-link:hover { color: white; transform: translateX(5px); }
         .social-link i { width: 18px; height: 18px; opacity: 0.6; }
         .social-link:hover i { opacity: 1; }
 
-        /* Review Marquee Styles */
+        /* ─── Marquee ────────────────────────────────────── */
         .marquee {
-            display: flex;
-            overflow: hidden;
-            user-select: none;
-            gap: 2rem;
+            display: flex; overflow: hidden; user-select: none; gap: 2rem;
             mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
         }
-
         .marquee__group {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            gap: 2rem;
-            min-width: 100%;
+            flex-shrink: 0; display: flex; align-items: center;
+            justify-content: space-around; gap: 2rem; min-width: 100%;
             animation: scroll 60s linear infinite;
         }
-
         @keyframes scroll {
             from { transform: translateX(0); }
-            to { transform: translateX(calc(-100% - 2rem)); }
+            to   { transform: translateX(calc(-100% - 2rem)); }
         }
-
         .review-card {
-            width: 350px;
+            width: 320px;
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.05);
-            padding: 2rem;
+            padding: 1.75rem;
             border-radius: 4px;
+            flex-shrink: 0;
+        }
+        @media (max-width: 767px) {
+            .review-card { width: 280px; padding: 1.25rem; }
         }
 
+        /* ─── TripAdvisor badge ──────────────────────────── */
         .tripadvisor-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #00af87;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 2px;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 1px;
+            display: inline-flex; align-items: center; gap: 10px;
+            background: #00af87; color: white;
+            padding: 8px 16px; border-radius: 2px;
+            font-size: 10px; font-weight: 700;
+            letter-spacing: 1px; text-transform: uppercase;
+        }
+
+        /* ─── Mobile hamburger menu ──────────────────────── */
+        #mobile-menu {
+            display: none;
+            flex-direction: column;
+            position: fixed;
+            inset: 0;
+            background: #0A0A0A;
+            z-index: 40;
+            padding: 6rem 2.5rem 3rem;
+            gap: 2rem;
+        }
+        #mobile-menu.open { display: flex; }
+        #mobile-menu a {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem; font-weight: 700;
+            letter-spacing: -0.02em; color: #fff;
             text-transform: uppercase;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding-bottom: 1.25rem;
+            transition: color 0.2s;
+        }
+        #mobile-menu a:active { color: #aaa; }
+
+        #hamburger { display: none; }
+        @media (max-width: 1023px) {
+            #hamburger { display: flex; }
+        }
+
+        /* ─── Misc responsive helpers ────────────────────── */
+        @media (max-width: 767px) {
+            .hero-section { height: auto; min-height: 100svh; padding-bottom: 3rem; }
         }
     </style>
 </head>
@@ -128,94 +185,126 @@
 
     <div id="cursor"></div>
 
-    <header class="fixed top-0 w-full z-50 glass-nav px-10 py-5 flex justify-between items-center">
-        <div class="logo text-2xl font-bold tracking-tighter uppercase text-white">MAX RUMEAU</div>
+    <!-- ── Mobile Menu ── -->
+    <div id="mobile-menu">
+        <a href="#truth"    onclick="closeMobileMenu()">01. The Truth</a>
+        <a href="#expertise" onclick="closeMobileMenu()">02. Expertise</a>
+        <a href="#reviews"  onclick="closeMobileMenu()">03. Legacy</a>
+        <a href="#contact"  onclick="closeMobileMenu()">04. Contact</a>
+        <div class="mt-auto flex flex-col gap-4">
+            <a href="mailto:contact@maxrumeauphotography.com" class="social-link text-sm text-gray-400">
+                <i data-lucide="mail" class="w-4 h-4"></i> contact@maxrumeauphotography.com
+            </a>
+            <a href="tel:+33610813834" class="social-link text-sm text-gray-400">
+                <i data-lucide="phone" class="w-4 h-4"></i> +33 6 10 81 38 34
+            </a>
+        </div>
+    </div>
+
+    <!-- ── Navigation ── -->
+    <header class="fixed top-0 w-full z-50 glass-nav px-5 sm:px-10 py-4 sm:py-5 flex justify-between items-center">
+        <div class="logo text-xl sm:text-2xl font-bold tracking-tighter uppercase text-white">MAX RUMEAU</div>
+
+        <!-- Desktop nav -->
         <nav class="hidden lg:flex gap-10 items-center">
-            <a href="#truth" class="text-[10px] tracking-[0.2em] uppercase hover:text-white transition-opacity">01. The Truth</a>
-            <a href="#expertise" class="text-[10px] tracking-[0.2em] uppercase hover:text-white transition-opacity">02. Expertise</a>
-            <a href="#reviews" class="text-[10px] tracking-[0.2em] uppercase hover:text-white transition-opacity">03. Legacy</a>
-            <a href="#contact" class="text-[10px] tracking-[0.2em] uppercase hover:text-white transition-opacity">04. Contact</a>
-            <a href="#" class="hover:text-white transition-opacity"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+            <a href="#truth"    class="text-[10px] tracking-[0.2em] uppercase hover:text-white transition-opacity opacity-60 hover:opacity-100">01. The Truth</a>
+            <a href="#expertise" class="text-[10px] tracking-[0.2em] uppercase hover:text-white transition-opacity opacity-60 hover:opacity-100">02. Expertise</a>
+            <a href="#reviews"  class="text-[10px] tracking-[0.2em] uppercase hover:text-white transition-opacity opacity-60 hover:opacity-100">03. Legacy</a>
+            <a href="#contact"  class="text-[10px] tracking-[0.2em] uppercase hover:text-white transition-opacity opacity-60 hover:opacity-100">04. Contact</a>
+            <a href="#" class="hover:text-white transition-opacity opacity-60 hover:opacity-100"><i data-lucide="instagram" class="w-4 h-4"></i></a>
         </nav>
-        <div class="flex items-center gap-6">
+
+        <div class="flex items-center gap-4">
             <span class="hidden sm:block text-[10px] text-[#555] tracking-widest uppercase text-right">Available / Paris 2026</span>
-            <button class="btn-premium bg-white text-black px-8 py-3 text-[11px] font-bold tracking-widest uppercase rounded-[2px]">
+            <button class="btn-premium bg-white text-black px-5 sm:px-8 py-2.5 sm:py-3 text-[10px] sm:text-[11px] font-bold tracking-widest uppercase rounded-[2px]">
                 Inquire
+            </button>
+            <!-- Hamburger -->
+            <button id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu"
+                class="w-10 h-10 flex flex-col justify-center items-center gap-[5px] z-50">
+                <span id="hb-top"    class="block w-6 h-[1.5px] bg-white transition-all duration-300"></span>
+                <span id="hb-mid"    class="block w-6 h-[1.5px] bg-white transition-all duration-300"></span>
+                <span id="hb-bottom" class="block w-4 h-[1.5px] bg-white transition-all duration-300 self-start"></span>
             </button>
         </div>
     </header>
 
-    <section class="relative h-[120vh] w-full flex flex-col justify-end pb-20 px-10 overflow-hidden">
+    <!-- ── Hero ── -->
+    <section class="hero-section relative w-full flex flex-col justify-end pb-16 sm:pb-20 px-5 sm:px-10 overflow-hidden"
+             style="min-height: 100svh;">
         <div class="absolute inset-0 z-0" id="hero-container">
-            <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=2020&auto=format&fit=crop" 
+            <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=2020&auto=format&fit=crop"
                  id="hero-bg"
-                 class="w-full h-full object-cover grayscale brightness-[0.4] scale-125" 
+                 class="w-full h-full object-cover grayscale brightness-[0.4] scale-125"
                  alt="Paris Landscape">
             <div class="absolute inset-0 hero-gradient"></div>
         </div>
-        
+
         <div class="relative z-10 w-full max-w-[1800px] mx-auto">
-            <div class="mb-12">
-                <p class="text-[10px] tracking-[0.3em] uppercase text-white mb-4 overflow-hidden">
+            <div class="mb-8 sm:mb-12">
+                <p class="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-white mb-3 sm:mb-4 overflow-hidden">
                     <span class="inline-block translate-y-full" id="hero-mini-tag">Independent Photographer based in France</span>
                 </p>
-                <h1 class="text-[10vw] md:text-[8vw] font-bold leading-[0.85] tracking-tighter text-white" data-splitting id="main-title">
+                <h1 class="text-[13vw] sm:text-[10vw] md:text-[8vw] font-bold leading-[0.85] tracking-tighter text-white" data-splitting id="main-title">
                     CAPTURING THE<br>ESSENCE.
                 </h1>
             </div>
 
             <div class="hero-info-grid opacity-0" id="hero-stats">
-                <div class="pr-10 border-r border-white/10">
-                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-4 text-white">Philosophy</span>
-                    <p class="text-sm text-[#888] leading-relaxed max-w-[300px]">
+                <div class="pr-0 sm:pr-10 border-r-0 sm:border-r border-white/10">
+                    <span class="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase block mb-3 sm:mb-4 text-white">Philosophy</span>
+                    <p class="text-xs sm:text-sm text-[#888] leading-relaxed max-w-[300px]">
                         We believe that photography is not about seeing, but about feeling. We document the silent dialogues between architecture and soul.
                     </p>
                 </div>
-                <div class="px-10 border-r border-white/10">
-                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-4 text-white">Focus</span>
-                    <p class="text-sm text-[#888] leading-relaxed">
+                <div class="px-0 sm:px-10 border-r-0 sm:border-r border-white/10">
+                    <span class="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase block mb-3 sm:mb-4 text-white">Focus</span>
+                    <p class="text-xs sm:text-sm text-[#888] leading-relaxed">
                         High-End Editorial<br>Architectural Mastery<br>Private Commissions
                     </p>
                 </div>
-                <div class="pl-10 flex flex-col justify-between italic text-white/40">
+                <div class="pl-0 sm:pl-10 flex flex-col justify-between gap-4 italic text-white/40">
                     <p class="text-xs">"Paris is a museum, and every street corner is a frame waiting to be lived."</p>
-                    <div class="flex gap-4">
-                        <span class="text-[10px] border border-white/20 px-2 py-1 uppercase text-white/60">Leica Q3</span>
-                        <span class="text-[10px] border border-white/20 px-2 py-1 uppercase text-white/60">35mm Fixed</span>
+                    <div class="flex gap-3 flex-wrap">
+                        <span class="text-[9px] border border-white/20 px-2 py-1 uppercase text-white/60">Leica Q3</span>
+                        <span class="text-[9px] border border-white/20 px-2 py-1 uppercase text-white/60">35mm Fixed</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="truth" class="py-24 bg-white">
-        <div class="px-10 max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <!-- ── Truth section ── -->
+    <section id="truth" class="py-16 sm:py-24 bg-white">
+        <div class="px-5 sm:px-10 max-w-7xl mx-auto">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 sm:mb-10 gap-4">
                 <span class="text-[10px] tracking-[0.3em] uppercase block font-bold text-gray-400">01 — The Brutal Truth</span>
                 <div class="tripadvisor-badge">
-                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-white" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm0 18.5a6.5 6.5 0 110-13 6.5 6.5 0 010 13zm-2.5-6a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm5 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>
+                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-white" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm0 18.5a6.5 6.5 0 110-13 6.5 6.5 0 010 13zm-2.5-6a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm5 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
+                    </svg>
                     Recommended on TripAdvisor
                 </div>
             </div>
-            <h2 class="text-5xl md:text-7xl font-bold tracking-tighter leading-none mb-12 reveal text-black">
-                YOU ARE NOT <br> "UNPHOTOGENIC".
+            <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter leading-none mb-8 sm:mb-12 reveal text-black">
+                YOU ARE NOT <br class="hidden sm:block"> "UNPHOTOGENIC".
             </h2>
-            <div class="grid md:grid-cols-2 gap-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
                 <div class="reveal">
-                    <p class="text-xl leading-tight font-medium mb-6 text-gray-900">
+                    <p class="text-lg sm:text-xl leading-tight font-medium mb-5 sm:mb-6 text-gray-900">
                         Most people think they look "bad" on camera. In reality, they've just been victims of mediocre photographers.
                     </p>
-                    <p class="text-base text-gray-500 leading-relaxed">
+                    <p class="text-sm text-gray-500 leading-relaxed">
                         Cheap lenses, wrong angles, and "amateur hands" destroy your confidence. They miss the micro-expressions, the lighting that shapes your face, and the soul of the moment.
                     </p>
                 </div>
-                <div class="reveal space-y-6">
-                    <div class="p-6 border-l-2 border-black">
+                <div class="reveal space-y-5 sm:space-y-6">
+                    <div class="p-5 sm:p-6 border-l-2 border-black">
                         <h4 class="font-bold text-xs uppercase tracking-widest mb-2 text-black">The Difference</h4>
                         <p class="text-sm text-gray-500">Max doesn't "take" photos. He crafts them using premium optics and a deep understanding of human anatomy and light geometry. You don't need to "pose" — you just need a professional.</p>
                     </div>
-                    <div class="p-6 bg-black text-white">
-                        <p class="italic text-base">"I've shot over 500+ clients who 'hated' being photographed. Every single one left with the best portrait of their life."</p>
+                    <div class="p-5 sm:p-6 bg-black text-white">
+                        <p class="italic text-sm sm:text-base">"I've shot over 500+ clients who 'hated' being photographed. Every single one left with the best portrait of their life."</p>
                         <span class="block mt-3 text-[9px] tracking-widest">— MAX RUMEAU</span>
                     </div>
                 </div>
@@ -223,10 +312,13 @@
         </div>
     </section>
 
-    <section id="reviews" class="py-40 bg-[#0A0A0A] border-t border-white/5">
-        <div class="px-10 mb-20 text-center">
-            <span class="text-[10px] tracking-[0.5em] uppercase text-white/30 block mb-6">Testimonials</span>
-            <h2 class="text-5xl md:text-7xl font-bold tracking-tighter uppercase">The Legacy of <span class="text-outline">Light</span></h2>
+    <!-- ── Reviews marquee ── -->
+    <section id="reviews" class="py-24 sm:py-40 bg-[#0A0A0A] border-t border-white/5">
+        <div class="px-5 sm:px-10 mb-12 sm:mb-20 text-center">
+            <span class="text-[9px] sm:text-[10px] tracking-[0.5em] uppercase text-white/30 block mb-4 sm:mb-6">Testimonials</span>
+            <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter uppercase">
+                The Legacy of <span class="text-outline">Light</span>
+            </h2>
         </div>
 
         <div class="marquee">
@@ -334,49 +426,50 @@
         </div>
     </section>
 
-    <section class="py-40 bg-[#0A0A0A] overflow-hidden">
-        <div class="max-w-[1800px] mx-auto px-10">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+    <!-- ── About / Creator ── -->
+    <section class="py-24 sm:py-40 bg-[#0A0A0A] overflow-hidden">
+        <div class="max-w-[1800px] mx-auto px-5 sm:px-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-24 items-center">
                 <div class="relative aspect-[3/4] overflow-hidden reveal">
-                    <img src="https://static.wixstatic.com/media/84c826_fe67480c6cbb4bdba175f85468cf52d8~mv2.jpg/v1/crop/x_0,y_478,w_3775,h_3763/fill/w_624,h_728,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Paris%20Photoshoot%20-%20Max%20Rumeau%20Photography%20-%20WEB-83.jpg" 
-                         alt="Max Rumeau" 
+                    <img src="https://static.wixstatic.com/media/84c826_fe67480c6cbb4bdba175f85468cf52d8~mv2.jpg/v1/crop/x_0,y_478,w_3775,h_3763/fill/w_624,h_728,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Paris%20Photoshoot%20-%20Max%20Rumeau%20Photography%20-%20WEB-83.jpg"
+                         alt="Max Rumeau"
                          id="max-portrait"
                          class="w-full h-full object-cover scale-110 grayscale hover:grayscale-0 transition-all duration-1000">
-                    <div class="absolute bottom-10 left-10">
-                        <span class="text-white text-8xl font-bold opacity-10 uppercase tracking-tighter">HUMAN</span>
+                    <div class="absolute bottom-6 sm:bottom-10 left-6 sm:left-10">
+                        <span class="text-white text-6xl sm:text-8xl font-bold opacity-10 uppercase tracking-tighter">HUMAN</span>
                     </div>
                 </div>
 
                 <div class="reveal">
-                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-10 text-white/30 font-bold">02 — The Creator</span>
-                    <h2 class="text-5xl md:text-7xl font-bold tracking-tighter leading-none mb-10 uppercase">
+                    <span class="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase block mb-8 sm:mb-10 text-white/30 font-bold">02 — The Creator</span>
+                    <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter leading-none mb-8 sm:mb-10 uppercase">
                         HI, I'M MAX. <br>YOUR EYES IN PARIS.
                     </h2>
-                    <p class="text-xl text-[#888] leading-relaxed mb-10 font-medium">
-                        Born and raised in Paris, I’m not just the guy with a Leica. I’m your holiday planner, your city guide, and your friend in the city of light. 🗼
+                    <p class="text-base sm:text-xl text-[#888] leading-relaxed mb-8 sm:mb-10 font-medium">
+                        Born and raised in Paris, I'm not just the guy with a Leica. I'm your holiday planner, your city guide, and your friend in the city of light. 🗼
                     </p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        <div class="space-y-4">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-10">
+                        <div class="space-y-3">
                             <h4 class="text-white font-bold tracking-widest uppercase text-xs">Friendly Approach</h4>
                             <p class="text-sm text-[#666]">My relaxed demeanor ensures genuine, heartfelt photographs. Forget "stiff posing" — we just walk and talk.</p>
                         </div>
-                        <div class="space-y-4">
+                        <div class="space-y-3">
                             <h4 class="text-white font-bold tracking-widest uppercase text-xs">Local Expertise</h4>
                             <p class="text-sm text-[#666]">I know the hidden corners where the light hits just right, far from the tourist crowds.</p>
                         </div>
-                        <div class="space-y-4">
+                        <div class="space-y-3">
                             <h4 class="text-white font-bold tracking-widest uppercase text-xs">Trilingual</h4>
                             <p class="text-sm text-[#666]">Fluent in English and French, and I can communicate in Spanish too. No barriers, just memories.</p>
                         </div>
-                        <div class="space-y-4">
+                        <div class="space-y-3">
                             <h4 class="text-white font-bold tracking-widest uppercase text-xs">Quality Obsessed</h4>
                             <p class="text-sm text-[#666]">I personally handle every single edit. No presets, no outsourcing. Just pure craft.</p>
                         </div>
                     </div>
 
-                    <div class="mt-16 flex gap-4">
-                        <div class="px-6 py-4 border border-white/10 rounded-full flex items-center gap-3">
+                    <div class="mt-10 sm:mt-16">
+                        <div class="px-5 sm:px-6 py-4 border border-white/10 rounded-full inline-flex items-center gap-3">
                             <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                             <span class="text-[10px] uppercase tracking-widest font-bold">Always Open to Your Ideas</span>
                         </div>
@@ -386,76 +479,82 @@
         </div>
     </section>
 
-    <section id="expertise" class="py-20 bg-[#0A0A0A]">
-        <div class="px-10 mb-10">
-            <h2 class="text-4xl font-bold tracking-tighter uppercase text-white">The Disciplines</h2>
+    <!-- ── Expertise / Disciplines ── -->
+    <section id="expertise" class="py-12 sm:py-20 bg-[#0A0A0A]">
+        <div class="px-5 sm:px-10 mb-8 sm:mb-10">
+            <h2 class="text-3xl sm:text-4xl font-bold tracking-tighter uppercase text-white">The Disciplines</h2>
         </div>
-        
-        <div class="flex flex-col md:flex-row h-auto md:h-[700px] w-full gap-2 px-2">
-            <div class="service-card group relative flex flex-col justify-end p-10 flex-1 overflow-hidden bg-[url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069')] bg-cover bg-center">
+
+        <div class="flex flex-col md:flex-row w-full gap-2 px-2">
+            <div class="service-card group relative flex flex-col justify-end p-6 sm:p-10 overflow-hidden
+                        bg-[url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069')] bg-cover bg-center">
                 <div class="relative z-10">
                     <span class="text-[10px] tracking-widest text-white/50 uppercase">01</span>
-                    <h3 class="text-3xl font-bold uppercase text-white">Weddings</h3>
-                    <p class="text-sm text-white/0 group-hover:text-white/70 transition-all duration-500 mt-2">Cinematic storytelling for high-end celebrations.</p>
+                    <h3 class="text-2xl sm:text-3xl font-bold uppercase text-white">Weddings</h3>
+                    <p class="text-sm text-white/70 md:text-white/0 md:group-hover:text-white/70 transition-all duration-500 mt-2">Cinematic storytelling for high-end celebrations.</p>
                 </div>
             </div>
-            <div class="service-card group relative flex flex-col justify-end p-10 flex-1 overflow-hidden bg-[url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974')] bg-cover bg-center">
+            <div class="service-card group relative flex flex-col justify-end p-6 sm:p-10 overflow-hidden
+                        bg-[url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974')] bg-cover bg-center">
                 <div class="relative z-10">
                     <span class="text-[10px] tracking-widest text-white/50 uppercase">02</span>
-                    <h3 class="text-3xl font-bold uppercase text-white">Solo / Icons</h3>
-                    <p class="text-sm text-white/0 group-hover:text-white/70 transition-all duration-500 mt-2">Personal branding for leaders and visionaries.</p>
+                    <h3 class="text-2xl sm:text-3xl font-bold uppercase text-white">Solo / Icons</h3>
+                    <p class="text-sm text-white/70 md:text-white/0 md:group-hover:text-white/70 transition-all duration-500 mt-2">Personal branding for leaders and visionaries.</p>
                 </div>
             </div>
-            <div class="service-card group relative flex flex-col justify-end p-10 flex-1 overflow-hidden bg-[url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070')] bg-cover bg-center">
+            <div class="service-card group relative flex flex-col justify-end p-6 sm:p-10 overflow-hidden
+                        bg-[url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070')] bg-cover bg-center">
                 <div class="relative z-10">
                     <span class="text-[10px] tracking-widest text-white/50 uppercase">03</span>
-                    <h3 class="text-3xl font-bold uppercase text-white">Real Estate</h3>
-                    <p class="text-sm text-white/0 group-hover:text-white/70 transition-all duration-500 mt-2">Architectural precision for premium properties.</p>
+                    <h3 class="text-2xl sm:text-3xl font-bold uppercase text-white">Real Estate</h3>
+                    <p class="text-sm text-white/70 md:text-white/0 md:group-hover:text-white/70 transition-all duration-500 mt-2">Architectural precision for premium properties.</p>
                 </div>
             </div>
-            <div class="service-card group relative flex flex-col justify-end p-10 flex-1 overflow-hidden bg-[url('https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=2020')] bg-cover bg-center">
+            <div class="service-card group relative flex flex-col justify-end p-6 sm:p-10 overflow-hidden
+                        bg-[url('https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=2020')] bg-cover bg-center">
                 <div class="relative z-10">
                     <span class="text-[10px] tracking-widest text-white/50 uppercase">04</span>
-                    <h3 class="text-3xl font-bold uppercase text-white">Photo Tours</h3>
-                    <p class="text-sm text-white/0 group-hover:text-white/70 transition-all duration-500 mt-2">Discovering hidden Paris through a professional lens.</p>
+                    <h3 class="text-2xl sm:text-3xl font-bold uppercase text-white">Photo Tours</h3>
+                    <p class="text-sm text-white/70 md:text-white/0 md:group-hover:text-white/70 transition-all duration-500 mt-2">Discovering hidden Paris through a professional lens.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer id="contact" class="pt-32 pb-10 px-10 border-t border-white/5 bg-[#0A0A0A]">
+    <!-- ── Footer / Contact ── -->
+    <footer id="contact" class="pt-20 sm:pt-32 pb-8 sm:pb-10 px-5 sm:px-10 border-t border-white/5 bg-[#0A0A0A]">
         <div class="max-w-[1800px] mx-auto">
-            <div class="mb-24">
-                <h2 class="text-[8vw] font-bold text-outline uppercase leading-none mb-10 opacity-50">Reserve Your Legacy</h2>
+            <div class="mb-12 sm:mb-24 overflow-hidden">
+                <h2 class="text-[10vw] sm:text-[8vw] font-bold text-outline uppercase leading-none opacity-50">Reserve Your Legacy</h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-16 mb-16 sm:mb-24">
                 <div>
-                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-8 text-gray-500 font-bold">Bookings & Info</span>
+                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-6 sm:mb-8 text-gray-500 font-bold">Bookings & Info</span>
                     <ul class="space-y-4">
                         <li>
-                            <a href="mailto:contact@maxrumeauphotography.com" class="social-link text-lg">
-                                <i data-lucide="mail"></i> 
-                                <span class="text-sm">contact@maxrumeau...</span>
+                            <a href="mailto:contact@maxrumeauphotography.com" class="social-link text-base sm:text-lg">
+                                <i data-lucide="mail"></i>
+                                <span class="text-xs sm:text-sm break-all">contact@maxrumeau...</span>
                             </a>
                         </li>
                         <li>
-                            <a href="https://maxrumeau.photography" target="_blank" class="social-link text-lg">
+                            <a href="https://maxrumeau.photography" target="_blank" class="social-link text-base sm:text-lg">
                                 <i data-lucide="globe"></i>
-                                <span class="text-sm">Official Portfolio</span>
+                                <span class="text-xs sm:text-sm">Official Portfolio</span>
                             </a>
                         </li>
                         <li>
-                            <a href="tel:+33610813834" class="social-link text-lg">
+                            <a href="tel:+33610813834" class="social-link text-base sm:text-lg">
                                 <i data-lucide="phone"></i>
-                                <span class="text-sm">+33 6 10 81 38 34</span>
+                                <span class="text-xs sm:text-sm">+33 6 10 81 38 34</span>
                             </a>
                         </li>
                     </ul>
                 </div>
 
                 <div>
-                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-8 text-gray-500 font-bold">Services</span>
+                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-6 sm:mb-8 text-gray-500 font-bold">Services</span>
                     <ul class="space-y-3 text-sm text-[#888]">
                         <li><a href="#" class="hover:text-white transition-all">Couple Photoshoots</a></li>
                         <li><a href="#" class="hover:text-white transition-all">Family Photoshoot</a></li>
@@ -465,7 +564,7 @@
                 </div>
 
                 <div>
-                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-8 text-gray-500 font-bold">Connect</span>
+                    <span class="text-[10px] tracking-[0.3em] uppercase block mb-6 sm:mb-8 text-gray-500 font-bold">Connect</span>
                     <ul class="space-y-4">
                         <li>
                             <a href="#" class="social-link">
@@ -488,15 +587,15 @@
                     </ul>
                 </div>
 
-                <div class="flex flex-col justify-between">
+                <div class="flex flex-col justify-between gap-8">
                     <div>
-                        <span class="text-[10px] tracking-[0.3em] uppercase block mb-8 text-gray-500 font-bold">Location</span>
+                        <span class="text-[10px] tracking-[0.3em] uppercase block mb-6 sm:mb-8 text-gray-500 font-bold">Location</span>
                         <p class="text-sm text-[#888] flex gap-2 items-start">
-                            <i data-lucide="map-pin" class="w-4 h-4 mt-1"></i>
+                            <i data-lucide="map-pin" class="w-4 h-4 mt-1 flex-shrink-0"></i>
                             Based in Paris, France.<br>Available for worldwide commissions.
                         </p>
                     </div>
-                    <div class="mt-10">
+                    <div>
                         <div class="flex items-center gap-2">
                             <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
                             <span class="text-[10px] uppercase tracking-widest text-white">Accepting 2026 Bookings</span>
@@ -505,8 +604,8 @@
                 </div>
             </div>
 
-            <div class="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-white/5 gap-6">
-                <div class="text-[9px] tracking-[0.5em] text-[#444] uppercase text-center md:text-left">
+            <div class="flex flex-col sm:flex-row justify-between items-center pt-8 sm:pt-10 border-t border-white/5 gap-4">
+                <div class="text-[9px] tracking-[0.5em] text-[#444] uppercase text-center sm:text-left">
                     © 2026 MAX RUMEAU — HAND-CODED PREMIUM EXPERIENCE
                 </div>
             </div>
@@ -518,30 +617,68 @@
         Splitting();
         gsap.registerPlugin(ScrollTrigger);
 
+        /* ── Custom cursor (desktop only) ── */
         const cursor = document.querySelector('#cursor');
         document.addEventListener('mousemove', (e) => {
             gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
         });
 
+        /* ── Hamburger menu ── */
+        let menuOpen = false;
+        function toggleMobileMenu() {
+            menuOpen = !menuOpen;
+            const menu = document.getElementById('mobile-menu');
+            const top = document.getElementById('hb-top');
+            const mid = document.getElementById('hb-mid');
+            const bot = document.getElementById('hb-bottom');
+            if (menuOpen) {
+                menu.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                top.style.transform = 'translateY(6.5px) rotate(45deg)';
+                mid.style.opacity = '0';
+                bot.style.transform = 'translateY(-6.5px) rotate(-45deg)';
+                bot.style.width = '1.5rem';
+                bot.style.alignSelf = 'center';
+            } else {
+                closeMobileMenu();
+            }
+        }
+        function closeMobileMenu() {
+            menuOpen = false;
+            document.getElementById('mobile-menu').classList.remove('open');
+            document.body.style.overflow = '';
+            document.getElementById('hb-top').style.transform = '';
+            document.getElementById('hb-mid').style.opacity = '1';
+            const bot = document.getElementById('hb-bottom');
+            bot.style.transform = '';
+            bot.style.width = '1rem';
+            bot.style.alignSelf = 'flex-start';
+        }
+
+        /* ── Hero entrance ── */
         const tl = gsap.timeline();
         tl.to('#hero-mini-tag', { y: 0, duration: 1, ease: "power4.out", delay: 0.5 })
           .to('.char', { y: 0, opacity: 1, stagger: 0.03, duration: 1, ease: "expo.out" }, "-=0.5")
           .to('#hero-stats', { opacity: 1, y: -20, duration: 1.5 }, "-=0.7");
 
-        gsap.to('#hero-bg', {
-            scrollTrigger: { trigger: 'section', start: 'top top', end: 'bottom top', scrub: true },
-            y: 200, scale: 1
-        });
+        /* ── Parallax (disabled on mobile for performance) ── */
+        const isMobile = window.matchMedia('(max-width: 767px)').matches;
+        if (!isMobile) {
+            gsap.to('#hero-bg', {
+                scrollTrigger: { trigger: 'section', start: 'top top', end: 'bottom top', scrub: true },
+                y: 200, scale: 1
+            });
+            gsap.to('#max-portrait', {
+                scrollTrigger: { trigger: '#max-portrait', start: 'top bottom', end: 'bottom top', scrub: true },
+                y: -100
+            });
+        }
 
-        gsap.to('#max-portrait', {
-            scrollTrigger: { trigger: '#max-portrait', start: 'top bottom', end: 'bottom top', scrub: true },
-            y: -100
-        });
-
+        /* ── Scroll reveal ── */
         gsap.utils.toArray('.reveal').forEach(el => {
             gsap.from(el, {
-                scrollTrigger: { trigger: el, start: "top 85%" },
-                y: 60, opacity: 0, duration: 1.5, ease: "power4.out"
+                scrollTrigger: { trigger: el, start: "top 88%" },
+                y: 50, opacity: 0, duration: 1.5, ease: "power4.out"
             });
         });
     </script>
